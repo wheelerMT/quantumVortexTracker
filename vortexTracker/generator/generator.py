@@ -1,32 +1,26 @@
 import pygpe.scalar as gpe
-from pygpe.shared.vortices import vortex_phase_profile
+import vortices as vortex
 import cupy as cp
+import h5py
 import numpy as np
-import matplotlib.pyplot as plt
 
 
-def generate_image(iteration: int):
-    """Generates grayscale images containing a random amount of vortices.
-
-    :param iteration: Iteration number.
-    """
+def generate_data(iteration: int):
+    vortex_pos = vortex.generate_positions(grid, 2, 2)
+    x_pos, y_pos = zip(*vortex_pos)
+    positions[iteration, :] = x_pos + y_pos
+    initial_phase = vortex.vortex_phase_profile(grid, vortex_pos)
     psi = gpe.Wavefunction(grid)
     psi.set_wavefunction(cp.ones(grid_points, dtype='complex128'))
-    phase = vortex_phase_profile(grid, np.random.choice(vortex_numbers), 2)
-
-    psi.apply_phase(cp.asarray(phase))
+    psi.apply_phase(cp.asarray(initial_phase))
     psi.fft()
     for _ in range(params["nt"]):
         gpe.step_wavefunction(psi, params)
     psi.ifft()
-    psi.add_noise(0, 1e-2)
-
-    plt.imshow(cp.asnumpy(psi.density()), cmap='gray')
-    plt.axis('off')
-    plt.savefig(f'../data/test_{iteration}.png', bbox_inches='tight')
+    phases[iteration, :, :] = cp.asnumpy(cp.angle(psi.wavefunction))
 
 
-grid_points = (128, 128)
+grid_points = (256, 256)
 grid_spacing = (0.5, 0.5)
 grid = gpe.Grid(grid_points, grid_spacing)
 params = {
@@ -35,7 +29,16 @@ params = {
     "nt": 100,
     "dt": -1j * 1e-2
 }
-vortex_numbers = [num for num in range(2, 22, 2)]
 
-for i in range(10):
-    generate_image(i)
+# Generate data tensor
+num_of_datasets = 1000
+phases = np.empty((num_of_datasets, 256, 256))
+positions = np.empty((num_of_datasets, 4))
+
+for i in range(num_of_datasets):
+    generate_data(i)
+
+data = h5py.File('../data/data.hdf5', 'w')
+data.create_dataset('phases', data=phases)
+data.create_dataset('positions', data=positions)
+data.close()
