@@ -33,7 +33,7 @@ params = {
 }
 
 # Generate data tensor
-num_of_datasets = 5000
+num_of_datasets = 20000
 phases = np.empty((num_of_datasets, 256, 256))
 positions = np.empty((num_of_datasets, 4))
 
