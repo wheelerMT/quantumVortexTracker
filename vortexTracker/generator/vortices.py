@@ -6,7 +6,6 @@ def generate_positions(grid: Grid, num_vortices: int, threshold: float) -> iter:
     """Generates and returns a list of positions that are separated by at least
     `threshold`.
     """
-    print(f"Attempting to find {num_vortices} positions...")
     max_iter = 10000
     vortex_positions = []
 
