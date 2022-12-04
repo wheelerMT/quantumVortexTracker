@@ -6,6 +6,8 @@ import numpy as np
 
 
 def generate_data(iteration: int):
+    if iteration % 100 == 0:
+        print(f'On iteration {iteration}')
     vortex_pos = vortex.generate_positions(grid, 2, 2)
     x_pos, y_pos = zip(*vortex_pos)
     positions[iteration, :] = x_pos + y_pos
@@ -31,7 +33,7 @@ params = {
 }
 
 # Generate data tensor
-num_of_datasets = 1000
+num_of_datasets = 5000
 phases = np.empty((num_of_datasets, 256, 256))
 positions = np.empty((num_of_datasets, 4))
 
