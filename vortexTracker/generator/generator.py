@@ -19,7 +19,11 @@ def generate_data(iteration: int):
     for _ in range(params["nt"]):
         gpe.step_wavefunction(psi, params)
     psi.ifft()
-    phases[iteration, :, :] = cp.asnumpy(cp.angle(psi.wavefunction))
+
+    # Reshape before saving
+    phase = cp.asnumpy(cp.angle(psi.wavefunction))
+    phase = phase[..., np.newaxis]
+    phases[iteration, ...] = phase
 
 
 grid_points = (256, 256)
@@ -33,8 +37,8 @@ params = {
 }
 
 # Generate data tensor
-num_of_datasets = 20000
-phases = np.empty((num_of_datasets, 256, 256))
+num_of_datasets = 10000
+phases = np.empty((num_of_datasets, 256, 256, 1))
 positions = np.empty((num_of_datasets, 4))
 
 for i in range(num_of_datasets):
