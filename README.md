@@ -5,8 +5,8 @@ This project aims to build a deep learning model that can accurately predict the
 given the phase of the condensate.
 
 ## Current features
-- QVT currently supports $256 \times 256$ numerical grids.
-- Predict positions of vortex dipoles.
+- QVT supports arbitrary grid sizes.
+- Predict the positions of vortices in a dipole pair.
 
 Below is an example of the model in action, accurately locating the vortex (blue square) and anti-vortex
 (red square).
@@ -24,6 +24,5 @@ vortices.
 The model is trained on data generated using [PyGPE](https://github.com/wheelerMT/pygpe).
 
 ## Improvements
-- Refine the model so it's more accurate.
 - Add support for different grid sizes.
 - Add support for multiple dipoles.
