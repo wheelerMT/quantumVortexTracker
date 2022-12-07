@@ -16,7 +16,7 @@ Below is an example of the model in action, accurately locating the vortex (blue
 See [this notebook](vortexTracker/detect/test_model.ipynb) for more thorough tests of the model.
 
 ## How does it work?
-QPT is a convolution neural network (CNN) that acts on the phase of the condensate wave function
+QVT is a convolution neural network (CNN) that acts on the phase of the condensate wave function
 (see [this notebook](vortexTracker/detect/model.ipynb) for details on how the model is created).
 At the end of the CNN are dense layers in which the last layer outputs the two locations of the
 vortices.
